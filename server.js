@@ -2,7 +2,7 @@ const express = require("express")
 const cors = require("cors")
 require("dotenv").config()
 const db = require("./db")
-const User = require("./models/user")
+const apiRouter = require("./routes/api-routes")
 
 const app = express()
 
@@ -10,6 +10,8 @@ app.use(cors())
 app.use(express.json())
 
 const port = process.env.HTTP_PORT
+
+app.use("/api", apiRouter)
 
 db.initializeDatabase(process.env.MONGO_CONNECTION_STRING)
    .then(() => {
