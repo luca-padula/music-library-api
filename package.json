@@ -1,0 +1,11 @@
+{
+  "name": "music-library-api",
+  "version": "1.0.0",
+  "description": "api for personal music library app",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Luca Padula",
+  "license": "ISC"
+}
