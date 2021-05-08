@@ -5,6 +5,7 @@ module.exports.initializeDatabase = function (mongoDBConnectionString) {
       mongoose.connect(mongoDBConnectionString, {
          useNewUrlParser: true,
          useUnifiedTopology: true,
+         useCreateIndex: true
       })
 
       mongoose.connection.on("error", (err) => {
