@@ -9,10 +9,11 @@ router.get("/", (req, res) => {
 
 router.post("/register", async (req, res) => {
    try {
-      let msg = await userController.registerUser(req.body)
-      res.json({ message: msg })
+      let createdUser = await userController.registerUser(req.body)
+      res.json({ createdUser })
    } catch (err) {
-      res.status(422).send()
+      console.log(err)
+      res.status(422).end()
    }
 })
 

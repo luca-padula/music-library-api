@@ -1,8 +1,6 @@
-const mongoose = require("mongoose")
-const User = require("../models/user")
+const userService = require("../services/user-service")
 
-module.exports.registerUser = function (userData) {
-   return new Promise((resolve, reject) => {
-      resolve("successfully registered user")
-   })
+module.exports.registerUser = async function (userData) {
+   userData.password = await userService.hashPassword(userData.password)
+   return await userService.createUser(userData)
 }
