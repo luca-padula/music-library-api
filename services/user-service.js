@@ -1,6 +1,6 @@
 const mongoose = require("mongoose")
 const bcrypt = require("bcryptjs")
-const User = require("../models/user")
+const User = require("../models/user.js")
 
 module.exports.createUser = async function (userData) {
    let newUser = new User(userData)
