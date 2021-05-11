@@ -8,5 +8,5 @@ module.exports.validateRequest = function (req, res, next) {
    // map errors to validation errors, probably through util function
    // since validateRequest() probably shouldnt handle mapping errors
    // probably create classes for custom error types
-   return next(errors)
+   return next({ expressValidatorErrors: errors.array() })
 }
