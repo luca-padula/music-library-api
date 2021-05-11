@@ -1,7 +1,47 @@
+const ApiError = require("../utils/error-classes/api-error")
+const ApiValidationError = require("../utils/error-classes/api-validation-error")
+
+function handleMongoDupKeyError(err, res) {
+   const duplicateField = Object.keys(err.keyPattern)[0]
+   const errMsg = `${duplicateField} is already taken`
+   const resErr = new ApiError(409, errMsg)
+   res.status(resErr.status).send(resErr)
+}
+
+function handleMongoValidationError(err, res) {
+   const invalidFields = Object.keys(err.errors)
+   const validationErrs = []
+   invalidFields.forEach((field) => {
+      validationErrs.push(`invalid ${field} entered`)
+   })
+   const errMsg = "mongodb validation errors"
+   const resErr = new ApiValidationError(422, errMsg, validationErrs)
+   res.status(resErr.status).send(resErr)
+}
+
+function handleExpressValidatorError(err, res) {
+   const validationErrs = []
+   err.expressValidatorErrors.forEach((validatorErr) => {
+      validationErrs.push(validatorErr.msg)
+   })
+   const errMsg = "express validator errors"
+   const resErr = new ApiValidationError(422, errMsg, validationErrs)
+   res.status(resErr.status).send(resErr)
+}
+
 module.exports = function (err, req, res, next) {
    console.log(`in error handling middleware: ${err}`)
-   if (err.code != null && err.code === 11000) {
-      return res.status(409).send(err)
+   if ("code" in err && err.code === 11000) {
+      return handleMongoDupKeyError(err, res)
    }
-   res.status(500).send(err)
+   if ("name" in err && err.name === "ValidationError") {
+      return handleMongoValidationError(err, res)
+   }
+   if ("expressValidatorErrors" in err) {
+      return handleExpressValidatorError(err, res)
+   }
+   const resErr = new ApiError(500, "An unknown error occured")
+   res.status(resErr.status).send(resErr)
 }
+
+// consider making separate error parser module if file gets too long
