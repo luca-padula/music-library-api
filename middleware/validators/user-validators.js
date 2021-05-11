@@ -9,5 +9,6 @@ module.exports.userValidationRules = function () {
             options: { min: 6 },
          },
       },
+      // other validations
    })
 }
