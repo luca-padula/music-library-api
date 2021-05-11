@@ -29,6 +29,8 @@ function handleExpressValidatorError(err, res) {
    res.status(resErr.status).send(resErr)
 }
 
+// **consider making separate error parser module if file gets too long**
+
 module.exports = function (err, req, res, next) {
    console.log(`in error handling middleware: ${err}`)
    if ("code" in err && err.code === 11000) {
@@ -43,5 +45,3 @@ module.exports = function (err, req, res, next) {
    const resErr = new ApiError(500, "An unknown error occured")
    res.status(resErr.status).send(resErr)
 }
-
-// consider making separate error parser module if file gets too long
