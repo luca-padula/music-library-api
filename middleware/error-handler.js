@@ -36,11 +36,11 @@ module.exports = function (err, req, res, next) {
    if ("code" in err && err.code === 11000) {
       return handleMongoDupKeyError(err, res)
    }
-   if ("name" in err && err.name === "ValidationError") {
-      return handleMongoValidationError(err, res)
-   }
    if ("expressValidatorErrors" in err) {
       return handleExpressValidatorError(err, res)
+   }
+   if ("name" in err && err.name === "ValidationError") {
+      return handleMongoValidationError(err, res)
    }
    const resErr = new ApiError(500, "An unknown error occured")
    res.status(resErr.status).send(resErr)
