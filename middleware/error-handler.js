@@ -8,6 +8,16 @@ function handleMongoDupKeyError(err, res) {
    res.status(resErr.status).send(resErr)
 }
 
+function handleExpressValidatorError(err, res) {
+   const validationErrs = []
+   err.expressValidatorErrors.forEach((validatorErr) => {
+      validationErrs.push(validatorErr.msg)
+   })
+   const errMsg = "express validator errors"
+   const resErr = new ApiValidationError(422, errMsg, validationErrs)
+   res.status(resErr.status).send(resErr)
+}
+
 function handleMongoValidationError(err, res) {
    const invalidFields = Object.keys(err.errors)
    const validationErrs = []
@@ -19,13 +29,9 @@ function handleMongoValidationError(err, res) {
    res.status(resErr.status).send(resErr)
 }
 
-function handleExpressValidatorError(err, res) {
-   const validationErrs = []
-   err.expressValidatorErrors.forEach((validatorErr) => {
-      validationErrs.push(validatorErr.msg)
-   })
-   const errMsg = "express validator errors"
-   const resErr = new ApiValidationError(422, errMsg, validationErrs)
+function handleMongoCastError(err, res) {
+   const errMsg = `invalid ${err.kind} for field (${err.path})`
+   const resErr = new ApiError(400, errMsg)
    res.status(resErr.status).send(resErr)
 }
 
@@ -41,6 +47,12 @@ module.exports = function (err, req, res, next) {
    }
    if ("name" in err && err.name === "ValidationError") {
       return handleMongoValidationError(err, res)
+   }
+   if ("name" in err && err.name === "CastError") {
+      return handleMongoCastError(err, res)
+   }
+   if (err instanceof ApiError) {
+      return res.status(err.status).send(err)
    }
    const resErr = new ApiError(500, "An unknown error occured")
    res.status(resErr.status).send(resErr)

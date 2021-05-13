@@ -1,4 +1,6 @@
 const { checkSchema } = require("express-validator")
+const artistService = require("../../services/artist-service.js")
+const ApiError = require("../../utils/error-classes/api-error.js")
 
 module.exports.artistValidationRules = function () {
    return checkSchema({
@@ -14,4 +16,18 @@ module.exports.artistValidationRules = function () {
          },
       },
    })
+}
+
+module.exports.verifyArtistIdReqParam = async function (req, res, next) {
+   try {
+      let artistId = req.params.artistId
+      let artist = await artistService.getArtistById(artistId)
+      if (artist == null) {
+         throw new ApiError(400, "that artist does not exist")
+      }
+      req.artist = artist
+      next()
+   } catch (err) {
+      next(err)
+   }
 }

@@ -4,6 +4,10 @@ module.exports.getAllArtists = async function () {
    return await artistService.getAllArtists()
 }
 
+module.exports.getArtist = async function (artistId) {
+   return await artistService.getArtistById(artistId)
+}
+
 module.exports.addArtist = async function (artistData) {
    return await artistService.createArtist(artistData)
 }

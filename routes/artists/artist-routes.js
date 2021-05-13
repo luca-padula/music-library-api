@@ -5,6 +5,8 @@ const validators = require("../../middleware/validators/validators.js")
 
 const router = express.Router()
 
+router.param("artistId", artistValidators.verifyArtistIdReqParam)
+
 router.get("/", async (req, res, next) => {
    try {
       let artists = await artistController.getAllArtists()
@@ -27,5 +29,10 @@ router.post(
       }
    }
 )
+
+router.get("/:artistId", async (req, res, next) => {
+   let artist = req.artist
+   res.json({ artist })
+})
 
 module.exports = router
