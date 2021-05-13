@@ -17,3 +17,7 @@ module.exports.createUser = async function (userData) {
 module.exports.hashPassword = async function (password) {
    return await bcrypt.hash(password, 10)
 }
+
+module.exports.checkPassword = async function (input, hash) {
+   return await bcrypt.compare(input, hash)
+}
