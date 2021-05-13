@@ -10,7 +10,7 @@ module.exports.userValidationRules = function () {
          },
          isEmpty: {
             negated: true,
-            errorMessage: "invalid username entered",
+            errorMessage: "username cannot be empty",
             bail: true,
          },
          custom: {
