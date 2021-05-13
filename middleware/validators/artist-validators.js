@@ -23,7 +23,7 @@ module.exports.verifyArtistIdReqParam = async function (req, res, next) {
       let artistId = req.params.artistId
       let artist = await artistService.getArtistById(artistId)
       if (artist == null) {
-         throw new ApiError(400, "that artist does not exist")
+         throw new ApiError(404, "that artist does not exist")
       }
       req.artist = artist
       next()
