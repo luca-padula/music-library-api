@@ -11,3 +11,7 @@ module.exports.getArtist = async function (artistId) {
 module.exports.addArtist = async function (artistData) {
    return await artistService.createArtist(artistData)
 }
+
+module.exports.updateArtist = async function (artistId, artistData) {
+   return await artistService.updateArtist(artistId, artistData)
+}

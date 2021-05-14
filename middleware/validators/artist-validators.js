@@ -18,6 +18,18 @@ module.exports.artistValidationRules = function () {
    })
 }
 
+module.exports.updateArtistValidationRules = function () {
+   return checkSchema({
+      name: {
+         optional: true,
+         isEmpty: {
+            negated: true,
+            errorMessage: "artist name cannot be empty",
+         },
+      },
+   })
+}
+
 module.exports.verifyArtistIdReqParam = async function (req, res, next) {
    try {
       let artistId = req.params.artistId

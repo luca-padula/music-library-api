@@ -37,4 +37,23 @@ router.get("/:artistId", async (req, res, next) => {
    res.json({ artist })
 })
 
+router.patch(
+   "/:artistId",
+   passport.authenticate("jwt", { session: false }),
+   artistValidators.updateArtistValidationRules(),
+   validators.validateRequest,
+   async (req, res, next) => {
+      try {
+         let artistId = req.params.artistId
+         let updatedArtist = await artistController.updateArtist(
+            artistId,
+            req.body
+         )
+         res.json({ updatedArtist })
+      } catch (err) {
+         next(err)
+      }
+   }
+)
+
 module.exports = router
