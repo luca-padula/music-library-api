@@ -1,4 +1,5 @@
 const express = require("express")
+const passport = require("passport")
 const artistController = require("../../controllers/artist-controller.js")
 const artistValidators = require("../../middleware/validators/artist-validators.js")
 const validators = require("../../middleware/validators/validators.js")
@@ -18,6 +19,7 @@ router.get("/", async (req, res, next) => {
 
 router.post(
    "/",
+   passport.authenticate("jwt", { session: false }),
    artistValidators.artistValidationRules(),
    validators.validateRequest,
    async (req, res, next) => {
