@@ -1,4 +1,6 @@
 const bcrypt = require("bcryptjs")
+const jwt = require("jsonwebtoken")
+const jwtSecret = require("../config/jwt-config.js")
 const User = require("../models/user.js")
 
 module.exports.getUserById = async function (userId) {
@@ -20,4 +22,13 @@ module.exports.hashPassword = async function (password) {
 
 module.exports.checkPassword = async function (input, hash) {
    return await bcrypt.compare(input, hash)
+}
+
+module.exports.buildJwtToken = function (user) {
+   const payload = {
+      _id: user._id,
+      userName: user.userName,
+   }
+   const token = jwt.sign(payload, jwtSecret)
+   return token
 }

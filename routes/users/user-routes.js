@@ -21,8 +21,8 @@ router.post(
 
 router.post("/login", async (req, res, next) => {
    try {
-      let user = await userController.login(req.body)
-      res.json({ user })
+      let token = await userController.login(req.body)
+      res.json({ token })
    } catch (err) {
       next(err)
    }

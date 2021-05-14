@@ -18,7 +18,8 @@ module.exports.login = async function (credentials) {
    if (!passwordsMatch) {
       throw new ApiError(422, "incorrect username or password entered")
    }
-   return user
+   const token = userService.buildJwtToken(user)
+   return token
 }
 
 module.exports.getUser = async function (userId) {
