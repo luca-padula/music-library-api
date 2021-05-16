@@ -11,6 +11,10 @@ const albumSchema = new Schema(
          type: Date,
          required: true,
       },
+      albumLength: {
+         type: String,
+         required: true,
+      },
       artist: {
          type: Schema.Types.ObjectId,
          ref: "Artist",

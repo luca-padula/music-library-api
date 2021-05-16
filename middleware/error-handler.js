@@ -38,7 +38,7 @@ function handleMongoCastError(err, res) {
 // **consider making separate error parser module if file gets too long**
 
 module.exports = function (err, req, res, next) {
-   console.log(`in error handling middleware: ${err}`)
+   console.log("in error handling middleware: ", err)
    if ("code" in err && err.code === 11000) {
       return handleMongoDupKeyError(err, res)
    }

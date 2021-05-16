@@ -10,13 +10,18 @@ router.get("/", async (req, res, next) => {
    res.send("get all albums")
 })
 
-router.post("/", async (req, res, next) => {
-   try {
-      let createdAlbum = albumController.addAlbum(req.body)
-      res.status(201).json({ createdAlbum })
-   } catch (err) {
-      next(err)
+router.post(
+   "/",
+   albumValidators.albumValidationRules(),
+   validators.validateRequest,
+   async (req, res, next) => {
+      try {
+         let createdAlbum = await albumController.addAlbum(req.body)
+         res.status(201).json({ createdAlbum })
+      } catch (err) {
+         next(err)
+      }
    }
-})
+)
 
 module.exports = router
