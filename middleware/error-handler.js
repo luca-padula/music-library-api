@@ -1,3 +1,4 @@
+const mongoose = require("mongoose")
 const ApiError = require("../utils/error-classes/api-error")
 const ApiValidationError = require("../utils/error-classes/api-validation-error")
 
@@ -38,17 +39,17 @@ function handleMongoCastError(err, res) {
 // **consider making separate error parser module if file gets too long**
 
 module.exports = function (err, req, res, next) {
-   console.log(`in error handling middleware: ${err}`)
+   console.log("in error handling middleware: ", err)
    if ("code" in err && err.code === 11000) {
       return handleMongoDupKeyError(err, res)
    }
    if ("expressValidatorErrors" in err) {
       return handleExpressValidatorError(err, res)
    }
-   if ("name" in err && err.name === "ValidationError") {
+   if (err instanceof mongoose.Error.ValidationError) {
       return handleMongoValidationError(err, res)
    }
-   if ("name" in err && err.name === "CastError") {
+   if (err instanceof mongoose.Error.CastError) {
       return handleMongoCastError(err, res)
    }
    if (err instanceof ApiError) {
