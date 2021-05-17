@@ -1,5 +1,7 @@
 const { checkSchema } = require("express-validator")
+const albumService = require("../../services/album-service.js")
 const artistService = require("../../services/artist-service.js")
+const ApiError = require("../../utils/error-classes/api-error.js")
 
 module.exports.albumValidationRules = function () {
    return checkSchema({
@@ -33,6 +35,10 @@ module.exports.albumValidationRules = function () {
             errorMessage: "invalid artist id entered",
             bail: true,
          },
+         isHexadecimal: {
+            errorMessage: "artist id can only contain hex characters",
+            bail: true,
+         },
          custom: {
             options: async (value, { req }) => {
                let foundArtist = await artistService.getArtistById(value)
@@ -43,4 +49,18 @@ module.exports.albumValidationRules = function () {
          },
       },
    })
+}
+
+module.exports.validateAlbumIdReqParam = async function (req, res, next) {
+   try {
+      const albumId = req.params.albumId
+      let album = await albumService.getAlbumById(albumId)
+      if (album == null) {
+         throw new ApiError(404, "that album does not exist")
+      }
+      req.album = album
+      next()
+   } catch (err) {
+      next(err)
+   }
 }

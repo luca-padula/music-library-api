@@ -6,8 +6,20 @@ const validators = require("../../middleware/validators/validators.js")
 
 const router = express.Router()
 
+router.param("albumId", albumValidators.validateAlbumIdReqParam)
+
 router.get("/", async (req, res, next) => {
-   res.send("get all albums")
+   try {
+      let albums = await albumController.getAllAlbums()
+      res.json({ albums })
+   } catch (err) {
+      next(err)
+   }
+})
+
+router.get("/:albumId", async (req, res, next) => {
+   let album = req.album
+   res.json({ album })
 })
 
 router.post(
