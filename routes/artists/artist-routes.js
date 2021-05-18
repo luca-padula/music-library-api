@@ -3,6 +3,7 @@ const passport = require("passport")
 const artistController = require("../../controllers/artist-controller.js")
 const artistValidators = require("../../middleware/validators/artist-validators.js")
 const validators = require("../../middleware/validators/validators.js")
+const nestedAlbumRoutes = require("./artist-albums/artist-album-routes.js")
 
 const router = express.Router()
 
@@ -55,5 +56,7 @@ router.patch(
       }
    }
 )
+
+router.use("/:artistId/albums", nestedAlbumRoutes)
 
 module.exports = router
