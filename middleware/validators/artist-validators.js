@@ -32,7 +32,7 @@ module.exports.updateArtistValidationRules = function () {
    })
 }
 
-module.exports.verifyArtistIdReqParam = async function (req, res, next) {
+module.exports.validateArtistIdReqParam = async function (req, res, next) {
    try {
       let artistId = req.params.artistId
       let artist = await artistService.getArtistById(artistId)

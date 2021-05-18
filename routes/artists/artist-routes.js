@@ -7,7 +7,7 @@ const nestedAlbumRoutes = require("./artist-albums/artist-album-routes.js")
 
 const router = express.Router()
 
-router.param("artistId", artistValidators.verifyArtistIdReqParam)
+router.param("artistId", artistValidators.validateArtistIdReqParam)
 
 router.get("/", async (req, res, next) => {
    try {
