@@ -24,6 +24,7 @@ router.get("/:albumId", async (req, res, next) => {
 
 router.post(
    "/",
+   passport.authenticate("jwt", { session: false }),
    albumValidators.albumValidationRules(),
    validators.validateRequest,
    async (req, res, next) => {
