@@ -16,3 +16,11 @@ module.exports.createAlbum = async function (albumData) {
    let newAlbum = new Album(albumData)
    return await newAlbum.save()
 }
+
+module.exports.updateAlbumById = async function (albumId, albumData) {
+   return await Album.findByIdAndUpdate(
+      albumId,
+      { $set: albumData },
+      { new: true }
+   ).exec()
+}

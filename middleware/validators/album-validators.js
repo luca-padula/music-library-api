@@ -51,6 +51,55 @@ module.exports.albumValidationRules = function () {
    })
 }
 
+module.exports.updateAlbumValidationRules = function () {
+   return checkSchema({
+      name: {
+         optional: true,
+         isEmpty: {
+            negated: true,
+            errorMessage: "invalid album name entered",
+         },
+      },
+      releaseDate: {
+         optional: true,
+         isDate: true,
+         errorMessage: "invalid release date entered",
+      },
+      albumLength: {
+         optional: true,
+         matches: {
+            options: /^(?:\d{1,2}:)?\d{1,2}:\d{2}$/,
+         },
+         errorMessage: "invalid album length entered",
+      },
+      artist: {
+         optional: true,
+         isEmpty: {
+            negated: true,
+            errorMessage: "no artist id entered",
+            bail: true,
+         },
+         isLength: {
+            options: 24,
+            errorMessage: "invalid artist id entered",
+            bail: true,
+         },
+         isHexadecimal: {
+            errorMessage: "artist id can only contain hex characters",
+            bail: true,
+         },
+         custom: {
+            options: async (value, { req }) => {
+               let foundArtist = await artistService.getArtistById(value)
+               if (foundArtist == null) {
+                  throw new Error("artist id does not exist")
+               }
+            },
+         },
+      },
+   })
+}
+
 module.exports.validateAlbumIdReqParam = async function (req, res, next) {
    try {
       const albumId = req.params.albumId

@@ -37,4 +37,20 @@ router.post(
    }
 )
 
+router.patch(
+   "/:albumId",
+   passport.authenticate("jwt", { session: false }),
+   albumValidators.updateAlbumValidationRules(),
+   validators.validateRequest,
+   async (req, res, next) => {
+      const albumId = req.params.albumId
+      try {
+         let updatedAlbum = await albumController.updateAlbum(albumId, req.body)
+         res.json({ updatedAlbum })
+      } catch (err) {
+         next(err)
+      }
+   }
+)
+
 module.exports = router
