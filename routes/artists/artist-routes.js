@@ -3,6 +3,7 @@ const passport = require("passport")
 const artistController = require("../../controllers/artist-controller.js")
 const artistValidators = require("../../middleware/validators/artist-validators.js")
 const validators = require("../../middleware/validators/validators.js")
+const nestedAlbumRoutes = require("./artist-albums/artist-album-routes.js")
 
 const router = express.Router()
 
@@ -36,5 +37,26 @@ router.get("/:artistId", async (req, res, next) => {
    let artist = req.artist
    res.json({ artist })
 })
+
+router.patch(
+   "/:artistId",
+   passport.authenticate("jwt", { session: false }),
+   artistValidators.updateArtistValidationRules(),
+   validators.validateRequest,
+   async (req, res, next) => {
+      try {
+         let artistId = req.params.artistId
+         let updatedArtist = await artistController.updateArtist(
+            artistId,
+            req.body
+         )
+         res.json({ updatedArtist })
+      } catch (err) {
+         next(err)
+      }
+   }
+)
+
+router.use("/:artistId/albums", nestedAlbumRoutes)
 
 module.exports = router

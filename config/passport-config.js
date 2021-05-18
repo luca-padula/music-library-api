@@ -8,7 +8,6 @@ const jwtFromRequest = ExtractJwt.fromAuthHeaderWithScheme("jwt")
 const secretOrKey = jwtSecret
 const jwtOptions = { jwtFromRequest, secretOrKey }
 const strategy = new JwtStrategy(jwtOptions, (jwtPayload, next) => {
-   console.log("payload: ", jwtPayload)
    if (jwtPayload) {
       return next(null, {
          _id: jwtPayload._id,
