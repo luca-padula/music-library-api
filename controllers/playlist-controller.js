@@ -15,3 +15,7 @@ module.exports.getPlaylistsByUser = async function (userId) {
 module.exports.addPlaylist = async function (playlistData) {
    return await playlistService.createPlaylist(playlistData)
 }
+
+module.exports.deletePlaylist = async function (playlistId) {
+   return await playlistService.deletePlaylistById(playlistId)
+}

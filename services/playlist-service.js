@@ -16,3 +16,7 @@ module.exports.createPlaylist = async function (playlistData) {
    let newPlaylist = new Playlist(playlistData)
    return await newPlaylist.save()
 }
+
+module.exports.deletePlaylistById = async function (playlistId) {
+   return await Playlist.findByIdAndDelete(playlistId)
+}
