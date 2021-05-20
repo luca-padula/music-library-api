@@ -20,6 +20,10 @@ const albumSchema = new Schema(
          ref: "Artist",
          index: true,
       },
+      artistName: {
+         type: String,
+         required: true,
+      },
    },
    { timestamps: true }
 )

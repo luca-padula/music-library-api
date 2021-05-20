@@ -3,6 +3,14 @@ const albumService = require("../../services/album-service.js")
 const artistService = require("../../services/artist-service.js")
 const ApiError = require("../../utils/error-classes/api-error.js")
 
+async function validateArtistIdReqBody(value, { req }) {
+   const foundArtist = await artistService.getArtistById(value)
+   if (foundArtist == null) {
+      throw new Error("artist id does not exist")
+   }
+   req.body.artistName = foundArtist.name
+}
+
 module.exports.albumValidationRules = function () {
    return checkSchema({
       name: {
@@ -40,12 +48,7 @@ module.exports.albumValidationRules = function () {
             bail: true,
          },
          custom: {
-            options: async (value, { req }) => {
-               let foundArtist = await artistService.getArtistById(value)
-               if (foundArtist == null) {
-                  throw new Error("artist id does not exist")
-               }
-            },
+            options: validateArtistIdReqBody,
          },
       },
    })
@@ -89,12 +92,7 @@ module.exports.updateAlbumValidationRules = function () {
             bail: true,
          },
          custom: {
-            options: async (value, { req }) => {
-               let foundArtist = await artistService.getArtistById(value)
-               if (foundArtist == null) {
-                  throw new Error("artist id does not exist")
-               }
-            },
+            options: validateArtistIdReqBody,
          },
       },
    })

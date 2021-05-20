@@ -5,14 +5,11 @@ module.exports.getAllAlbums = async function () {
 }
 
 module.exports.getAlbumById = async function (albumId) {
-   return await Album.findById(albumId).populate("artist").lean().exec()
+   return await Album.findById(albumId).lean().exec()
 }
 
 module.exports.getAlbumsByArtistId = async function (artistId) {
-   return await Album.find({ artist: artistId })
-      .populate("artist")
-      .lean()
-      .exec()
+   return await Album.find({ artist: artistId }).lean().exec()
 }
 
 module.exports.createAlbum = async function (albumData) {
@@ -26,4 +23,14 @@ module.exports.updateAlbumById = async function (albumId, albumData) {
       { $set: albumData },
       { new: true }
    ).exec()
+}
+
+module.exports.updateAlbumArtistNames = async function (
+   artistId,
+   newArtistName
+) {
+   return await Album.updateMany(
+      { artist: artistId },
+      { artistName: newArtistName }
+   )
 }
