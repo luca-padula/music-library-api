@@ -6,6 +6,8 @@ const nestedPlaylistRoutes = require("./user-playlists/user-playlists-routes.js"
 
 const router = express.Router()
 
+router.param("userId", userValidators.validateUserIdReqParam)
+
 router.post(
    "/register",
    userValidators.userValidationRules(),

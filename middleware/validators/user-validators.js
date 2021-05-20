@@ -1,5 +1,6 @@
 const { checkSchema } = require("express-validator")
 const userService = require("../../services/user-service.js")
+const ApiError = require("../../utils/error-classes/api-error.js")
 
 module.exports.userValidationRules = function () {
    return checkSchema({
@@ -40,4 +41,18 @@ module.exports.userValidationRules = function () {
          errorMessage: "invalid last name entered",
       },
    })
+}
+
+module.exports.validateUserIdReqParam = async function (req, res, next) {
+   const userId = req.params.userId
+   try {
+      const user = await userService.getUserById(userId)
+      if (user == null) {
+         throw new ApiError(404, "user id does not exist")
+      }
+      req.foundUser = user
+      next()
+   } catch (err) {
+      next(err)
+   }
 }
