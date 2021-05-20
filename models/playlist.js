@@ -8,7 +8,7 @@ const playlistSchema = new Schema(
          required: true,
          default: "Favourites",
       },
-      creator: { type: Schema.Types.ObjectId, ref: "User" },
+      creator: { type: Schema.Types.ObjectId, ref: "User", index: true },
       creatorUserName: {
          type: String,
          required: true,

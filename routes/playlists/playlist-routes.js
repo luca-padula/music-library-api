@@ -6,6 +6,8 @@ const validators = require("../../middleware/validators/validators.js")
 
 const router = express.Router()
 
+router.param("playlistId", playlistValidators.validatePlaylistIdReqParam)
+
 router.get("/", async (req, res, next) => {
    try {
       const playlists = await playlistController.getAllPlaylists()
@@ -29,5 +31,10 @@ router.post(
       }
    }
 )
+
+router.get("/:playlistId", async (req, res, next) => {
+   const playlist = req.playlist
+   res.json({ playlist })
+})
 
 module.exports = router

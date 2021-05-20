@@ -1,6 +1,8 @@
 const { checkSchema } = require("express-validator")
 const userService = require("../../services/user-service.js")
 const albumService = require("../../services/album-service.js")
+const playlistService = require("../../services/playlist-service.js")
+const ApiError = require("../../utils/error-classes/api-error.js")
 
 module.exports.playlistValidationRules = function () {
    return checkSchema({
@@ -84,4 +86,18 @@ module.exports.playlistValidationRules = function () {
          },
       },
    })
+}
+
+module.exports.validatePlaylistIdReqParam = async function (req, res, next) {
+   const playlistId = req.params.playlistId
+   try {
+      const playlist = await playlistService.getPlaylistById(playlistId)
+      if (playlist == null) {
+         throw new ApiError(404, "that playlist does not exist")
+      }
+      req.playlist = playlist
+      next()
+   } catch (err) {
+      next(err)
+   }
 }

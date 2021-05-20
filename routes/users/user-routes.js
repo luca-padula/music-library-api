@@ -2,6 +2,7 @@ const express = require("express")
 const userController = require("../../controllers/user-controller.js")
 const validators = require("../../middleware/validators/validators.js")
 const userValidators = require("../../middleware/validators/user-validators.js")
+const nestedPlaylistRoutes = require("./user-playlists/user-playlists-routes.js")
 
 const router = express.Router()
 
@@ -27,5 +28,7 @@ router.post("/login", async (req, res, next) => {
       next(err)
    }
 })
+
+router.use("/:userId/playlists", nestedPlaylistRoutes)
 
 module.exports = router
