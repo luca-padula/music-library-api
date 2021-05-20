@@ -101,3 +101,16 @@ module.exports.validatePlaylistIdReqParam = async function (req, res, next) {
       next(err)
    }
 }
+
+module.exports.validateUserOwnsPlaylist = async function (req, res, next) {
+   try {
+      const userId = req.user._id
+      const playlist = req.playlist
+      if (playlist.creator != userId) {
+         throw new ApiError(403, "you are not authorized for that playlist")
+      }
+      next()
+   } catch (err) {
+      next(err)
+   }
+}

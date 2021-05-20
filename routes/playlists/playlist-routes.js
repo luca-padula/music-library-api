@@ -37,4 +37,13 @@ router.get("/:playlistId", async (req, res, next) => {
    res.json({ playlist })
 })
 
+router.delete(
+   "/:playlistId",
+   passport.authenticate("jwt", { session: false }),
+   playlistValidators.validateUserOwnsPlaylist,
+   async (req, res, next) => {
+      res.send("delete playlist")
+   }
+)
+
 module.exports = router
