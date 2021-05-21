@@ -1,11 +1,11 @@
 const Playlist = require("../models/playlist.js")
 
 module.exports.getAllPlaylists = async function () {
-   return await Playlist.find().populate("albums").lean().exec()
+   return await Playlist.find().lean().exec()
 }
 
 module.exports.getPlaylistById = async function (playlistId) {
-   return await Playlist.findById(playlistId).lean().exec()
+   return await Playlist.findById(playlistId).populate("albums").lean().exec()
 }
 
 module.exports.getPlaylistsByUser = async function (userId) {
