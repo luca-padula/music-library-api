@@ -20,3 +20,9 @@ module.exports.createPlaylist = async function (playlistData) {
 module.exports.deletePlaylistById = async function (playlistId) {
    return await Playlist.findByIdAndDelete(playlistId)
 }
+
+module.exports.addAlbumToPlaylist = async function (albumId, playlistDocument) {
+   const newAlbumsArr = [...playlistDocument.albums, albumId]
+   playlistDocument.albums = newAlbumsArr
+   return await playlistDocument.save()
+}
