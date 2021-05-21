@@ -9,6 +9,20 @@ function handleMongoDupKeyError(err, res) {
    res.status(resErr.status).send(resErr)
 }
 
+function parseImmutableFieldInMongoError(err) {
+   const errString = err.toString()
+   const FieldStart = errString.indexOf("'") + 1
+   const FieldEnd = errString.indexOf("'", FieldStart)
+   return errString.slice(FieldStart, FieldEnd)
+}
+
+function handleMongoImmutableFieldError(err, res) {
+   const invalidField = parseImmutableFieldInMongoError(err)
+   const errMsg = `cannot update immutable field ${invalidField}`
+   const resErr = new ApiError(422, errMsg)
+   res.status(resErr.status).send(resErr)
+}
+
 function handleExpressValidatorError(err, res) {
    const validationErrs = []
    err.expressValidatorErrors.forEach((validatorErr) => {
@@ -42,6 +56,9 @@ module.exports = function (err, req, res, next) {
    console.log("in error handling middleware: ", err)
    if ("code" in err && err.code === 11000) {
       return handleMongoDupKeyError(err, res)
+   }
+   if ("code" in err && err.code === 66) {
+      return handleMongoImmutableFieldError(err, res)
    }
    if ("expressValidatorErrors" in err) {
       return handleExpressValidatorError(err, res)
