@@ -3,6 +3,7 @@ const passport = require("passport")
 const playlistController = require("../../controllers/playlist-controller.js")
 const playlistValidators = require("../../middleware/validators/playlist-validators.js")
 const validators = require("../../middleware/validators/validators.js")
+const nestedAlbumsRouter = require("./playlist-albums/playlist-albums-routes.js")
 
 const router = express.Router()
 
@@ -51,5 +52,7 @@ router.delete(
       }
    }
 )
+
+router.use("/:playlistId/albums", nestedAlbumsRouter)
 
 module.exports = router
