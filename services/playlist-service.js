@@ -8,6 +8,10 @@ module.exports.getPlaylistById = async function (playlistId) {
    return await Playlist.findById(playlistId).populate("albums").lean().exec()
 }
 
+module.exports.getPlaylistByIdFullDoc = async function (playlistId) {
+   return await Playlist.findById(playlistId).exec()
+}
+
 module.exports.getPlaylistsByUser = async function (userId) {
    return await Playlist.find({ creator: userId }).lean().exec()
 }

@@ -114,3 +114,17 @@ module.exports.validateUserOwnsPlaylist = async function (req, res, next) {
       next(err)
    }
 }
+
+module.exports.validateAlbumIsInPlaylist = async function (req, res, next) {
+   const playlist = req.playlist
+   const albumId = req.params.albumId
+   try {
+      const foundAlbum = playlist.albums.find((album) => album == albumId)
+      if (!foundAlbum) {
+         throw new ApiError(422, "playlist does not contain that album")
+      }
+      next()
+   } catch (err) {
+      next(err)
+   }
+}

@@ -19,3 +19,10 @@ module.exports.addPlaylist = async function (playlistData) {
 module.exports.deletePlaylist = async function (playlistId) {
    return await playlistService.deletePlaylistById(playlistId)
 }
+
+module.exports.addAlbumToPlaylist = async function (playlistId, albumId) {
+   const playlistDocument = await playlistService.getPlaylistByIdFullDoc(
+      playlistId
+   )
+   return await playlistService.addAlbumToPlaylist(albumId, playlistDocument)
+}
