@@ -35,3 +35,16 @@ module.exports.addAlbumToPlaylist = async function (playlistId, albumId) {
    }
    return await playlistService.addAlbumToPlaylist(albumId, playlistDocument)
 }
+
+module.exports.removeAlbumFromPlaylist = async function (playlistId, albumId) {
+   const playlistDocument = await playlistService.getPlaylistByIdFullDoc(
+      playlistId
+   )
+   if (!albumIsinPlaylist(albumId, playlistDocument)) {
+      throw new ApiError(422, "album is not in that playlist")
+   }
+   return await playlistService.removeAlbumFromPlaylist(
+      albumId,
+      playlistDocument
+   )
+}

@@ -31,7 +31,18 @@ router.delete(
    passport.authenticate("jwt", { session: false }),
    playlistValidators.validateUserOwnsPlaylist,
    async (req, res, next) => {
-      res.send("deleting album from playlist")
+      const playlistId = req.params.playlistId
+      const albumId = req.params.albumId
+      try {
+         const updatedPlaylist =
+            await playlistController.removeAlbumFromPlaylist(
+               playlistId,
+               albumId
+            )
+         res.json({ updatedPlaylist })
+      } catch (err) {
+         next(err)
+      }
    }
 )
 

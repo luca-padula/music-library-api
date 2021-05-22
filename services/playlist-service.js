@@ -33,3 +33,12 @@ module.exports.addAlbumToPlaylist = async function (albumId, playlistDocument) {
    playlistDocument.albums = newAlbumsArr
    return await playlistDocument.save()
 }
+
+module.exports.removeAlbumFromPlaylist = async function (
+   albumId,
+   playlistDocument
+) {
+   const albumIndex = playlistDocument.albums.indexOf(albumId)
+   playlistDocument.albums.splice(albumIndex, 1)
+   return await playlistDocument.save()
+}
