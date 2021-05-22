@@ -8,6 +8,9 @@ module.exports.getPlaylistById = async function (playlistId) {
    return await Playlist.findById(playlistId).populate("albums").lean().exec()
 }
 
+// Retrieves full mongoose document compared to similar function that gets
+// plain js object. Full document has extra functionality like saving
+// but makes the query slower.
 module.exports.getPlaylistByIdFullDoc = async function (playlistId) {
    return await Playlist.findById(playlistId).exec()
 }

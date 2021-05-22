@@ -115,11 +115,13 @@ module.exports.validateUserOwnsPlaylist = async function (req, res, next) {
    }
 }
 
-module.exports.validateAlbumIsInPlaylist = async function (req, res, next) {
+//consider taking out of middleware and putting in controller or service
+// so can use it to check if album is in playlist for add and delete functions
+module.exports.validateAlbumIsInPlaylist = function (req, res, next) {
    const playlist = req.playlist
    const albumId = req.params.albumId
    try {
-      const foundAlbum = playlist.albums.find((album) => album == albumId)
+      const foundAlbum = playlist.albums.find((album) => album._id == albumId)
       if (!foundAlbum) {
          throw new ApiError(422, "playlist does not contain that album")
       }
