@@ -30,7 +30,6 @@ router.delete(
    "/:albumId",
    passport.authenticate("jwt", { session: false }),
    playlistValidators.validateUserOwnsPlaylist,
-   playlistValidators.validateAlbumIsInPlaylist,
    async (req, res, next) => {
       res.send("deleting album from playlist")
    }
