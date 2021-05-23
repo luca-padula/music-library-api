@@ -7,11 +7,11 @@ module.exports.registerUser = async function (userData) {
 }
 
 module.exports.login = async function (credentials) {
-   let user = await userService.getUserByUsername(credentials.userName)
+   const user = await userService.getUserByUsername(credentials.userName)
    if (user == null) {
       throw new ApiError(422, "incorrect username or password entered")
    }
-   let passwordsMatch = await userService.checkPassword(
+   const passwordsMatch = await userService.checkPassword(
       credentials.password,
       user.password
    )

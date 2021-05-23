@@ -11,72 +11,29 @@ async function validateArtistIdReqBody(value, { req }) {
    req.body.artistName = foundArtist.name
 }
 
-module.exports.albumValidationRules = function () {
+module.exports.albumValidationRules = function (isPatch = false) {
    return checkSchema({
       name: {
-         exists: true,
-         isEmpty: false,
-         errorMessage: "invalid album name entered",
+         optional: isPatch,
+         isEmpty: {
+            negated: true,
+            errorMessage: "no album name entered",
+         },
       },
       releaseDate: {
+         optional: isPatch,
          isDate: true,
          errorMessage: "invalid release date entered",
       },
       albumLength: {
+         optional: isPatch,
          matches: {
             options: /^(?:\d{1,2}:)?\d{1,2}:\d{2}$/,
          },
          errorMessage: "invalid album length entered",
       },
       artist: {
-         exists: {
-            errorMessage: "no artist id entered",
-            bail: true,
-         },
-         isEmpty: {
-            negated: true,
-            errorMessage: "no artist id entered",
-            bail: true,
-         },
-         isLength: {
-            options: 24,
-            errorMessage: "invalid artist id entered",
-            bail: true,
-         },
-         isHexadecimal: {
-            errorMessage: "artist id can only contain hex characters",
-            bail: true,
-         },
-         custom: {
-            options: validateArtistIdReqBody,
-         },
-      },
-   })
-}
-
-module.exports.updateAlbumValidationRules = function () {
-   return checkSchema({
-      name: {
-         optional: true,
-         isEmpty: {
-            negated: true,
-            errorMessage: "invalid album name entered",
-         },
-      },
-      releaseDate: {
-         optional: true,
-         isDate: true,
-         errorMessage: "invalid release date entered",
-      },
-      albumLength: {
-         optional: true,
-         matches: {
-            options: /^(?:\d{1,2}:)?\d{1,2}:\d{2}$/,
-         },
-         errorMessage: "invalid album length entered",
-      },
-      artist: {
-         optional: true,
+         optional: isPatch,
          isEmpty: {
             negated: true,
             errorMessage: "no artist id entered",

@@ -40,7 +40,7 @@ router.post(
 router.patch(
    "/:albumId",
    passport.authenticate("jwt", { session: false }),
-   albumValidators.updateAlbumValidationRules(),
+   albumValidators.albumValidationRules(true),
    validators.validateRequest,
    async (req, res, next) => {
       const albumId = req.params.albumId

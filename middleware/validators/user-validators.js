@@ -2,6 +2,13 @@ const { checkSchema } = require("express-validator")
 const userService = require("../../services/user-service.js")
 const ApiError = require("../../utils/error-classes/api-error.js")
 
+async function checkUsernameTaken(value, { req }) {
+   let foundUser = await userService.getUserByUsername(value)
+   if (foundUser != null) {
+      throw new Error("username already taken")
+   }
+}
+
 module.exports.userValidationRules = function () {
    return checkSchema({
       userName: {
@@ -15,12 +22,7 @@ module.exports.userValidationRules = function () {
             bail: true,
          },
          custom: {
-            options: async (value, { req }) => {
-               let foundUser = await userService.getUserByUsername(value)
-               if (foundUser != null) {
-                  throw new Error("username already taken")
-               }
-            },
+            options: checkUsernameTaken,
          },
       },
       password: {

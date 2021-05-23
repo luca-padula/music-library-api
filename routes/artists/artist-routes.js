@@ -41,7 +41,7 @@ router.get("/:artistId", async (req, res, next) => {
 router.patch(
    "/:artistId",
    passport.authenticate("jwt", { session: false }),
-   artistValidators.updateArtistValidationRules(),
+   artistValidators.artistValidationRules(true),
    validators.validateRequest,
    async (req, res, next) => {
       try {
