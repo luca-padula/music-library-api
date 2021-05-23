@@ -19,6 +19,10 @@ module.exports.getPlaylistsByUser = async function (userId) {
    return await Playlist.find({ creator: userId }).lean().exec()
 }
 
+module.exports.savePlaylist = async function (playlistDocument) {
+   return await playlistDocument.save()
+}
+
 module.exports.createPlaylist = async function (playlistData) {
    let newPlaylist = new Playlist(playlistData)
    return await newPlaylist.save()
@@ -26,19 +30,4 @@ module.exports.createPlaylist = async function (playlistData) {
 
 module.exports.deletePlaylistById = async function (playlistId) {
    return await Playlist.findByIdAndDelete(playlistId)
-}
-
-module.exports.addAlbumToPlaylist = async function (albumId, playlistDocument) {
-   const newAlbumsArr = [...playlistDocument.albums, albumId]
-   playlistDocument.albums = newAlbumsArr
-   return await playlistDocument.save()
-}
-
-module.exports.removeAlbumFromPlaylist = async function (
-   albumId,
-   playlistDocument
-) {
-   const albumIndex = playlistDocument.albums.indexOf(albumId)
-   playlistDocument.albums.splice(albumIndex, 1)
-   return await playlistDocument.save()
 }

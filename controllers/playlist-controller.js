@@ -26,6 +26,11 @@ function albumIsinPlaylist(albumId, playlist) {
    return foundAlbum != null
 }
 
+function addAlbumToArray(albumArr, albumId) {
+   const newAlbumArr = [...albumArr, albumId]
+   return newAlbumArr
+}
+
 module.exports.addAlbumToPlaylist = async function (playlistId, albumId) {
    const playlistDocument = await playlistService.getPlaylistByIdFullDoc(
       playlistId
@@ -33,7 +38,15 @@ module.exports.addAlbumToPlaylist = async function (playlistId, albumId) {
    if (albumIsinPlaylist(albumId, playlistDocument)) {
       throw new ApiError(409, "album is already in playlist")
    }
-   return await playlistService.addAlbumToPlaylist(albumId, playlistDocument)
+   const newAlbumArr = addAlbumToArray(playlistDocument.albums, albumId)
+   playlistDocument.albums = newAlbumArr
+   return await playlistService.savePlaylist(playlistDocument)
+}
+
+function deleteAlbumFromArray(albumArray, albumIdToDelete) {
+   const indexToDelete = albumArray.indexOf(albumIdToDelete)
+   albumArray.splice(indexToDelete, 1)
+   return albumArray
 }
 
 module.exports.removeAlbumFromPlaylist = async function (playlistId, albumId) {
@@ -43,8 +56,6 @@ module.exports.removeAlbumFromPlaylist = async function (playlistId, albumId) {
    if (!albumIsinPlaylist(albumId, playlistDocument)) {
       throw new ApiError(422, "album is not in that playlist")
    }
-   return await playlistService.removeAlbumFromPlaylist(
-      albumId,
-      playlistDocument
-   )
+   deleteAlbumFromArray(playlistDocument.albums, albumId)
+   return await playlistService.savePlaylist(playlistDocument)
 }
