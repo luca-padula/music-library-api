@@ -2,28 +2,10 @@ const { checkSchema } = require("express-validator")
 const artistService = require("../../services/artist-service.js")
 const ApiError = require("../../utils/error-classes/api-error.js")
 
-module.exports.artistValidationRules = function () {
+module.exports.artistValidationRules = function (isPatch = false) {
    return checkSchema({
       name: {
-         exists: {
-            errorMessage: "no artist name entered",
-            bail: true,
-         },
-         isEmpty: {
-            negated: true,
-            errorMessage: "artist name cannot be empty",
-            bail: true,
-         },
-      },
-   })
-}
-
-// same validation rules as for creating a new artist but all fields
-// are optional since patch may not update every field
-module.exports.updateArtistValidationRules = function () {
-   return checkSchema({
-      name: {
-         optional: true,
+         optional: isPatch,
          isEmpty: {
             negated: true,
             errorMessage: "artist name cannot be empty",
