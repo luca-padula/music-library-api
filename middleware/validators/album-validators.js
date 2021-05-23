@@ -18,7 +18,6 @@ module.exports.albumValidationRules = function (isPatch = false) {
          isEmpty: {
             negated: true,
             errorMessage: "no album name entered",
-            bail: true,
          },
       },
       releaseDate: {
