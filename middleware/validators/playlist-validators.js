@@ -1,21 +1,19 @@
 const { checkSchema } = require("express-validator")
-const userService = require("../../services/user-service.js")
 const albumService = require("../../services/album-service.js")
 const playlistService = require("../../services/playlist-service.js")
 const ApiError = require("../../utils/error-classes/api-error.js")
 
-module.exports.playlistValidationRules = function () {
+module.exports.playlistValidationRules = function (isPatch = false) {
    return checkSchema({
       name: {
-         exists: true,
-         isEmpty: false,
-         errorMessage: "invalid playlist name entered",
+         optional: isPatch,
+         isEmpty: {
+            negated: true,
+            errorMessage: "no playlist name entered",
+         },
       },
       creator: {
-         exists: {
-            errorMessage: "no creator id entered",
-            bail: true,
-         },
+         optional: isPatch,
          isEmpty: {
             negated: true,
             errorMessage: "no creator id entered",
@@ -31,37 +29,23 @@ module.exports.playlistValidationRules = function () {
             bail: true,
          },
          custom: {
-            options: async (value, { req }) => {
-               if (value != req.user._id) {
-                  throw new Error("you can only create a playlist for yourself")
-               }
-               const foundUser = await userService.getUserById(value)
-               if (foundUser == null) {
-                  throw new Error("user id does not exist")
-               }
-               if (foundUser.userName != req.body.creatorUserName) {
-                  throw new Error("username does not match creator name")
-               }
-            },
+            options: checkCreatorIdMatchesUser,
          },
       },
       creatorUserName: {
-         exists: true,
-         isEmpty: false,
-         errorMessage: "invalid creator username entered",
+         optional: isPatch,
+         custom: {
+            options: checkCreatorUsernameMatchesUser,
+         },
       },
       albums: {
          optional: true,
          isArray: {
-            errorMessage: "invalid albums entered, please enter an array",
+            errorMessage: "albums must be an array",
             bail: true,
          },
       },
       "albums.*": {
-         exists: {
-            errorMessage: "empty album id entered",
-            bail: true,
-         },
          isEmpty: {
             negated: true,
             errorMessage: "empty album id entered",
@@ -77,12 +61,13 @@ module.exports.playlistValidationRules = function () {
             bail: true,
          },
          custom: {
-            options: async (value, { req }) => {
-               const foundAlbum = await albumService.getAlbumById(value)
-               if (foundAlbum == null) {
-                  throw new Error("album id does not exist")
-               }
-            },
+            options: checkAlbumExists,
+         },
+      },
+      isPrivate: {
+         optional: isPatch,
+         isBoolean: {
+            errorMessage: "isPrivate must be a boolean",
          },
       },
    })
@@ -113,4 +98,29 @@ module.exports.validateUserOwnsPlaylist = async function (req, res, next) {
    } catch (err) {
       next(err)
    }
+}
+
+async function checkAlbumExists(value, { req }) {
+   const foundAlbum = await albumService.getAlbumById(value)
+   if (foundAlbum == null) {
+      throw new Error("album id does not exist")
+   }
+}
+
+function checkCreatorIdMatchesUser(value, { req }) {
+   return new Promise((resolve, reject) => {
+      if (value != req.user._id) {
+         reject("you can only create a playlist for yourself")
+      }
+      resolve()
+   })
+}
+
+function checkCreatorUsernameMatchesUser(value, { req }) {
+   return new Promise((resolve, reject) => {
+      if (value != req.user.userName) {
+         reject("username does not match creator name")
+      }
+      resolve()
+   })
 }

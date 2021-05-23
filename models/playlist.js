@@ -14,6 +14,7 @@ const playlistSchema = new Schema(
          required: true,
       },
       albums: [{ type: Schema.Types.ObjectId, ref: "Album" }],
+      isPrivate: { type: Boolean, required: true },
    },
    { timestamps: true }
 )
