@@ -18,6 +18,11 @@ router.get("/", async (req, res, next) => {
    }
 })
 
+router.get("/:playlistId", async (req, res, next) => {
+   const playlist = req.playlist
+   res.json({ playlist })
+})
+
 router.post(
    "/",
    passport.authenticate("jwt", { session: false }),
@@ -33,10 +38,25 @@ router.post(
    }
 )
 
-router.get("/:playlistId", async (req, res, next) => {
-   const playlist = req.playlist
-   res.json({ playlist })
-})
+router.patch(
+   "/:playlistId",
+   passport.authenticate("jwt", { session: false }),
+   playlistValidators.validateUserOwnsPlaylist,
+   playlistValidators.playlistValidationRules(true),
+   validators.validateRequest,
+   async (req, res, next) => {
+      const playlistId = req.params.playlistId
+      try {
+         const updatedPlaylist = await playlistController.updatePlaylist(
+            playlistId,
+            req.body
+         )
+         res.json({ updatedPlaylist })
+      } catch (err) {
+         next(err)
+      }
+   }
+)
 
 router.delete(
    "/:playlistId",

@@ -46,7 +46,7 @@ function handleMongoValidationError(err, res) {
 
 function handleMongoCastError(err, res) {
    const errMsg = `invalid ${err.kind} for field (${err.path})`
-   const resErr = new ApiError(400, errMsg)
+   const resErr = new ApiError(422, errMsg)
    res.status(resErr.status).send(resErr)
 }
 
