@@ -28,6 +28,14 @@ module.exports.createPlaylist = async function (playlistData) {
    return await newPlaylist.save()
 }
 
+module.exports.updatePlaylistById = async function (playlistId, playlistData) {
+   return await Playlist.findByIdAndUpdate(
+      playlistId,
+      { $set: playlistData },
+      { new: true }
+   )
+}
+
 module.exports.deletePlaylistById = async function (playlistId) {
    return await Playlist.findByIdAndDelete(playlistId)
 }

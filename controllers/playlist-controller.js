@@ -17,6 +17,14 @@ module.exports.addPlaylist = async function (playlistData) {
    return await playlistService.createPlaylist(playlistData)
 }
 
+module.exports.updatePlaylist = async function (playlistId, playlistData) {
+   const fieldsToUpdate = Object.keys(playlistData)
+   if (fieldsToUpdate.length == 0) {
+      throw new ApiError(422, "no album data given to update")
+   }
+   return await playlistService.updatePlaylistById(playlistId, playlistData)
+}
+
 module.exports.deletePlaylist = async function (playlistId) {
    return await playlistService.deletePlaylistById(playlistId)
 }
