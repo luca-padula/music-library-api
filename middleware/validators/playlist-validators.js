@@ -14,6 +14,13 @@ module.exports.playlistValidationRules = function (isPatch = false) {
       },
       creator: {
          optional: isPatch,
+         exists: {
+            negated: isPatch,
+            errorMessage: isPatch
+               ? "cannot update creator id on this route"
+               : "no creator id entered",
+            bail: true,
+         },
          isEmpty: {
             negated: true,
             errorMessage: "no creator id entered",

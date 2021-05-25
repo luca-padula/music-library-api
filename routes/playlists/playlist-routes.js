@@ -42,6 +42,8 @@ router.patch(
    "/:playlistId",
    passport.authenticate("jwt", { session: false }),
    playlistValidators.validateUserOwnsPlaylist,
+   playlistValidators.playlistValidationRules(true),
+   validators.validateRequest,
    async (req, res, next) => {
       const playlistId = req.params.playlistId
       try {
