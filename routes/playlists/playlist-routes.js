@@ -12,7 +12,7 @@ router.param("playlistId", playlistValidators.validatePlaylistIdReqParam)
 router.get("/", async (req, res, next) => {
    try {
       const playlists = await playlistController.getAllPlaylists()
-      res.json({ playlists })
+      res.json(playlists)
    } catch (err) {
       next(err)
    }
@@ -20,7 +20,7 @@ router.get("/", async (req, res, next) => {
 
 router.get("/:playlistId", async (req, res, next) => {
    const playlist = req.playlist
-   res.json({ playlist })
+   res.json(playlist)
 })
 
 router.post(

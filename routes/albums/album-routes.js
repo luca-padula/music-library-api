@@ -11,7 +11,7 @@ router.param("albumId", albumValidators.validateAlbumIdReqParam)
 router.get("/", async (req, res, next) => {
    try {
       let albums = await albumController.getAllAlbums()
-      res.json({ albums })
+      res.json(albums)
    } catch (err) {
       next(err)
    }
@@ -19,7 +19,7 @@ router.get("/", async (req, res, next) => {
 
 router.get("/:albumId", async (req, res, next) => {
    let album = req.album
-   res.json({ album })
+   res.json(album)
 })
 
 router.post(

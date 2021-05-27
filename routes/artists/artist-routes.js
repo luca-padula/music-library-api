@@ -12,7 +12,7 @@ router.param("artistId", artistValidators.validateArtistIdReqParam)
 router.get("/", async (req, res, next) => {
    try {
       let artists = await artistController.getAllArtists()
-      res.json({ artists })
+      res.json(artists)
    } catch (err) {
       next(err)
    }
@@ -35,7 +35,7 @@ router.post(
 
 router.get("/:artistId", async (req, res, next) => {
    let artist = req.artist
-   res.json({ artist })
+   res.json(artist)
 })
 
 router.patch(

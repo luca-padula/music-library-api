@@ -7,7 +7,7 @@ router.get("/", async (req, res, next) => {
    const userId = req.params.userId
    try {
       const playlists = await playlistController.getPlaylistsByUser(userId)
-      res.json({ playlists })
+      res.json(playlists)
    } catch (err) {
       next(err)
    }
