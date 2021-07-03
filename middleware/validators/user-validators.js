@@ -12,6 +12,7 @@ async function checkUsernameTaken(value, { req }) {
 module.exports.userValidationRules = function () {
    return checkSchema({
       userName: {
+         trim: true,
          exists: {
             errorMessage: "no username entered",
             bail: true,
@@ -27,20 +28,29 @@ module.exports.userValidationRules = function () {
       },
       password: {
          isLength: {
-            errorMessage: "Password should be at least 6 chars long",
-            // Multiple options would be expressed as an array
+            errorMessage: "password must be at least 6 characters long",
             options: { min: 6 },
          },
       },
       firstName: {
-         exists: true,
-         isEmpty: false,
-         errorMessage: "invalid first name entered",
+         trim: true,
+         exists: {
+            errorMessage: "no first name entered",
+         },
+         isEmpty: {
+            negated: true,
+            errorMessage: "empty first name entered",
+         },
       },
       lastName: {
-         exists: true,
-         isEmpty: false,
-         errorMessage: "invalid last name entered",
+         trim: true,
+         exists: {
+            errorMessage: "no last name entered",
+         },
+         isEmpty: {
+            negated: true,
+            errorMessage: "empty last name entered",
+         },
       },
    })
 }
