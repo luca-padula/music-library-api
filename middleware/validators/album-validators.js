@@ -15,9 +15,14 @@ module.exports.albumValidationRules = function (isPatch = false) {
    return checkSchema({
       name: {
          optional: isPatch,
+         trim: true,
          isEmpty: {
             negated: true,
             errorMessage: "no album name entered",
+         },
+         isLength: {
+            options: { max: 70 },
+            errorMessage: "album name cannot be longer than 70 characters",
          },
       },
       releaseDate: {
@@ -34,6 +39,7 @@ module.exports.albumValidationRules = function (isPatch = false) {
       },
       artist: {
          optional: isPatch,
+         trim: true,
          isEmpty: {
             negated: true,
             errorMessage: "no artist id entered",
