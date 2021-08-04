@@ -6,9 +6,14 @@ module.exports.artistValidationRules = function (isPatch = false) {
    return checkSchema({
       name: {
          optional: isPatch,
+         trim: true,
          isEmpty: {
             negated: true,
             errorMessage: "artist name cannot be empty",
+         },
+         isLength: {
+            options: { max: 70 },
+            errorMessage: "artist name cannot be longer than 70 characters",
          },
       },
    })
