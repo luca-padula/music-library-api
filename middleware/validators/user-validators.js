@@ -22,6 +22,10 @@ module.exports.userValidationRules = function () {
             errorMessage: "username cannot be empty",
             bail: true,
          },
+         isLength: {
+            options: { max: 30 },
+            errorMessage: "username cannot be longer than 30 characters",
+         },
          custom: {
             options: checkUsernameTaken,
          },
@@ -41,6 +45,10 @@ module.exports.userValidationRules = function () {
             negated: true,
             errorMessage: "empty first name entered",
          },
+         isLength: {
+            options: { max: 30 },
+            errorMessage: "username cannot be longer than 30 characters",
+         },
       },
       lastName: {
          trim: true,
@@ -50,6 +58,10 @@ module.exports.userValidationRules = function () {
          isEmpty: {
             negated: true,
             errorMessage: "empty last name entered",
+         },
+         isLength: {
+            options: { max: 30 },
+            errorMessage: "username cannot be longer than 30 characters",
          },
       },
    })
