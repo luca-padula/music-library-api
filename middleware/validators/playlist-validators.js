@@ -7,9 +7,14 @@ module.exports.playlistValidationRules = function (isPatch = false) {
    return checkSchema({
       name: {
          optional: isPatch,
+         trim: true,
          isEmpty: {
             negated: true,
             errorMessage: "no playlist name entered",
+         },
+         isLength: {
+            options: { max: 30 },
+            errorMessage: "playlist name cannot be longer than 30 characters",
          },
       },
       creator: {
@@ -21,6 +26,7 @@ module.exports.playlistValidationRules = function (isPatch = false) {
                : "no creator id entered",
             bail: true,
          },
+         trim: true,
          isEmpty: {
             negated: true,
             errorMessage: "no creator id entered",
@@ -41,6 +47,7 @@ module.exports.playlistValidationRules = function (isPatch = false) {
       },
       creatorUserName: {
          optional: isPatch,
+         trim: true,
          custom: {
             options: checkCreatorUsernameMatchesUser,
          },
