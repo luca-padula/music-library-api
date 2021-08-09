@@ -12,7 +12,7 @@ app.use(passport.initialize())
 app.use(cors())
 app.use(express.json())
 
-const port = process.env.HTTP_PORT
+const port = process.env.PORT || 3000
 
 app.use("/api", apiRouter)
 
